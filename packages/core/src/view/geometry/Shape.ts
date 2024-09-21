@@ -325,6 +325,22 @@ class Shape {
     return document.createElementNS('http://www.w3.org/2000/svg', 'g');
   }
 
+  /**
+   * Creates and returns the SVG node(s) to represent this shape.
+   */
+  createSvg() {
+    return document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  }
+
+  /**
+   * Creates and returns the HTML DOM node(s) to represent this shape.
+   */
+  createHtml() {
+    const node = document.createElement('div');
+    node.style.position = 'absolute';
+    return node;
+  }
+
   redraw() {
     this.updateBoundsFromPoints();
 
