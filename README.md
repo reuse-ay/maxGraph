@@ -137,20 +137,22 @@ Documentation to be migrated:
 
 
 ## Examples
+<!-- copied into packages/website/docs/demo-and-examples.md -->
 
-For more complete examples than getting started,, please have a look at:
+For more comprehensive examples than the “Getting started” example, here is a list of demos and examples to help you understand how to use `maxGraph` and integrate it into your projects.
+
+Note that they are based on `maxGraph` features, which require the use of [CSS and images](packages/website/docs/usage/css-and-images.md) provided in the npm package.
 
 - the [storybook stories](packages/html/stories) which demonstrates various features of maxGraph.
   - The stories are currently written in `JavaScript` and will be progressively migrated to `TypeScript`.
-  - A live instance is available on the [maxGraph webiste](https://maxgraph.github.io/maxGraph/demo).
+  - A live instance is available on the [maxGraph website](https://maxgraph.github.io/maxGraph/demo).
 - the [ts-example](packages/ts-example) project/application that demonstrates how to define and use custom `Shapes` with `maxGraph`. It is a vanilla TypeScript application built by [Vite](https://vitejs.dev/).
 - the [ts-example-without-defaults](packages/ts-example-without-defaults) project/application that demonstrates how to not use defaults plugins and style defaults (shapes, perimeters, ...). It is a vanilla TypeScript application built by [Vite](https://vitejs.dev/).
-- the [js-example](packages/js-example) project/application that demonstrates how import and export the `maxGraph` model with XML data. It is a vanilla JavaScript application built by [Webapck](https://webpack.js.org/).
-- the [js-example-without-defaults](packages/js-example-without-defaults) project/application that demonstrates how to not use defaults plugins and style defaults (shapes, perimeters, ...). It is a vanilla JavaScript application built by [Webapck](https://webpack.js.org/).
-- the https://github.com/maxGraph/maxgraph-integration-examples repository which shows how to integrate `maxGraph` with different frameworks and build tools.
+- the [js-example](packages/js-example) project/application that demonstrates how to import and export the `maxGraph` model with XML data. It is a vanilla JavaScript application built by [Webpack](https://webpack.js.org/).
+- the [js-example-without-defaults](packages/js-example-without-defaults) project/application that demonstrates how to not use defaults plugins and style defaults (shapes, perimeters, ...). It is a vanilla JavaScript application built by [Webpack](https://webpack.js.org/).
+- the [maxgraph-integration-examples](https://github.com/maxGraph/maxgraph-integration-examples) repository which shows how to integrate `maxGraph` with different frameworks and build tools.
 
-
-Notice that some elements produced by `maxGraph` require to use [CSS and images](packages/website/docs/usage/css-and-images.md) provided in the npm package.
+<!-- END OF 'copied into packages/website/docs/demo-and-examples.md' -->
 
 
 ## <a id="migrate-from-mxgraph"></a> Migrating from mxGraph
