@@ -15,7 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { constants, EdgeStyle, Graph, LayoutManager, StackLayout } from '@maxgraph/core';
+import {
+  constants,
+  EdgeStyle,
+  EntityRelationConnectorConfig,
+  Graph,
+  LayoutManager,
+  StackLayout,
+} from '@maxgraph/core';
 import { globalTypes, globalValues } from './shared/args.js';
 import {
   configureExpandedAndCollapsedImages,
@@ -37,9 +44,8 @@ const Template = ({ label, ...args }: Record<string, string>) => {
   configureImagesBasePath();
   const container = createGraphContainer(args);
 
-  // TODO Allow overriding constants. See https://github.com/maxGraph/maxGraph/issues/192
-  // Enables crisp rendering of rectangles in SVG
-  // constants.ENTITY_SEGMENT = 20;
+  // Override default values
+  EntityRelationConnectorConfig.segment = 20;
 
   // Creates the graph inside the given container
   const graph = new Graph(container);
