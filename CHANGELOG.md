@@ -16,6 +16,11 @@ They are replaced by global configuration in `EdgeHandlerConfig`:
   - removeEnabled --> removeBendOnShiftClickEnabled
   - virtualBendOpacity
   - virtualBendsEnabled
+- `domUtils.importNodeImplementation` has been removed:
+  - This function was only used internally in `mxGraph` to support older versions of IE
+  - It was not intended to be part of the public API
+  - No migration steps are needed as the function was unused
+
 
 
 ## 0.14.0
