@@ -9,6 +9,14 @@ For more details on the contents of a release, see [the GitHub release page] (ht
 
 _**Note:** Yet to be released breaking changes appear here._
 
+## 0.15.0
+
+Release date: `2025-01-2ç`
+
+For more details, see the [0.15.0 Changelog](https://github.com/maxGraph/maxGraph/releases/tag/v0.15.0) on the GitHub release page.
+
+This new version offers more configuration options for edge handles (in particular, for virtual bends), and allows the "Entity Relation" connector to be globally configured.
+
 **Breaking Changes**:
 - Some properties have been removed from `EdgeHandler` as it was not possible to correctly change their value.
 They are replaced by global configuration in `EdgeHandlerConfig`:
@@ -20,8 +28,6 @@ They are replaced by global configuration in `EdgeHandlerConfig`:
   - This function was only used internally in `mxGraph` to support older versions of IE
   - It was not intended to be part of the public API
   - No migration steps are needed as the function was unused
-
-
 
 ## 0.14.0
 
