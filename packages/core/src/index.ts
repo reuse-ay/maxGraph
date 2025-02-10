@@ -62,7 +62,7 @@ export { default as RubberBandHandler } from './view/handler/RubberBandHandler';
 export { default as SelectionCellsHandler } from './view/handler/SelectionCellsHandler';
 export { default as TooltipHandler } from './view/handler/TooltipHandler';
 export { default as VertexHandler } from './view/handler/VertexHandler';
-export { VertexHandlerConfig } from './view/handler/config';
+export * from './view/handler/config';
 
 export { default as CircleLayout } from './view/layout/CircleLayout';
 export { default as CompactTreeLayout } from './view/layout/CompactTreeLayout';
@@ -142,7 +142,7 @@ export * as styleUtils from './util/styleUtils';
 export * as utils from './util/Utils';
 export * as xmlUtils from './util/xmlUtils';
 
-export { GlobalConfig } from './util/config';
+export * from './util/config';
 export * from './util/logger';
 
 export { default as Animation } from './view/animate/Animation';
@@ -159,6 +159,7 @@ export { default as ObjectIdentity } from './util/ObjectIdentity';
 export { default as Point } from './view/geometry/Point';
 export { default as Rectangle } from './view/geometry/Rectangle';
 
+export * from './view/style/config';
 export { default as EdgeStyle } from './view/style/EdgeStyle';
 export { default as Perimeter } from './view/style/Perimeter';
 export { default as StyleRegistry } from './view/style/StyleRegistry';

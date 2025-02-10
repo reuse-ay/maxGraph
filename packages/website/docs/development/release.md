@@ -18,7 +18,13 @@ Currently, the release process is completely manual. Automation will come later 
 
 Decide on the new version depending on the type of changes:
 - Follow [semver](https://semver.org/)
-- Check the new commits since the latest release to determine the type of changes included in the new version.
+- Check the new commits since the latest release to determine the types of changes included in the new version. This can be done by:
+    - running locally `git log --oneline <latest-release-tag>..HEAD` or by automatically retrieving the latest tag:
+      ```bash
+      LATEST_TAG=$(git describe --tags --abbrev=0)
+      git log --oneline ${LATEST_TAG}..HEAD
+      ```
+    - going to the [latest GitHub release page](https://github.com/maxGraph/maxGraph/releases/latest) and checking the commits since this release (a link is available just above the release title).
 - Until we release the first major version, bump the minor version if the release contains new features or breaking changes.
 
 Check the milestone associated with the new release. **Note:** We always put issues related to a version into a Milestone whose
@@ -35,8 +41,7 @@ Apply changes in the source code
   - Releases are done from the default branch, so all changes are done in the `main` branch.
   - These changes are going to be done locally, and then pushed to the repository.
   - Make sure that the code is up-to-date with the `main` branch. Run `git pull` to get the latest changes.
-- Update the version in `packages/core/package.json` and the `VERSION` constant in the `packages/core/src/Client.ts` file.
-- Update the `package-lock.json` file by running npm install at the root of the repository. It should only change the version of `@maxgraph/core`.
+- Update the version in various files by running, from the repository root: `node scripts/update-versions.mjs <version>` (replace `<version>` with the new version).
 - Update the `CHANGELOG` file to list the major changes included in the new version. Be generic and add a
 link to the future GitHub release that will contain detailed release notes, as shown below.
 ```

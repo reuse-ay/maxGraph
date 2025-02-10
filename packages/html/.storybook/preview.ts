@@ -1,5 +1,13 @@
 import type { Preview } from '@storybook/html';
-import { GlobalConfig, NoOpLogger, VertexHandlerConfig } from '@maxgraph/core';
+import {
+  GlobalConfig,
+  NoOpLogger,
+  resetEdgeHandlerConfig,
+  resetEntityRelationConnectorConfig,
+  resetHandleConfig,
+  resetStyleDefaultsConfig,
+  resetVertexHandlerConfig,
+} from '@maxgraph/core';
 
 const defaultLogger = new NoOpLogger();
 // if you want to debug using the browser console, use the following configuration
@@ -11,8 +19,20 @@ const defaultLogger = new NoOpLogger();
 const resetMaxGraphConfigs = (): void => {
   GlobalConfig.logger = defaultLogger;
 
-  VertexHandlerConfig.rotationEnabled = false;
+  resetEdgeHandlerConfig();
+  resetEntityRelationConnectorConfig();
+  resetHandleConfig();
+  resetStyleDefaultsConfig();
+  resetVertexHandlerConfig();
 };
+
+// This function is a workaround to destroy mxGraph elements that are not released by the previous story.
+// See https://github.com/maxGraph/maxGraph/issues/400
+function destroyUnreleasedElements() {
+  document
+    .querySelectorAll('.mxPopupMenu,.mxTooltip,.mxWindow')
+    .forEach((e) => e.remove());
+}
 
 const preview: Preview = {
   parameters: {
@@ -29,6 +49,7 @@ const preview: Preview = {
     // inspired by https://github.com/storybookjs/storybook/issues/4997#issuecomment-447301514
     (storyFn) => {
       resetMaxGraphConfigs();
+      destroyUnreleasedElements();
       return storyFn();
     },
   ],

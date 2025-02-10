@@ -2,9 +2,11 @@
   "name": "@maxgraph/core",
   "license": "Apache-2.0",
   "private": false,
-  "version": "0.13.0",
+  "version": "0.15.0",
   "type": "module",
-  "sideEffects": ["**/*.css"],
+  "sideEffects": [
+    "**/*.css"
+  ],
   "description": "maxGraph is a fully client side JavaScript diagramming library that uses SVG and HTML for rendering.",
   "keywords": [
     "browser",
@@ -13,23 +15,25 @@
     "graph",
     "svg"
   ],
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "module": "lib/index.js",
+  "types": "lib/index.d.ts",
   "exports": {
     ".": {
       "import": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
+        "types": "./lib/index.d.ts",
+        "default": "./lib/index.js"
       }
     },
     "./css/*": "./css/*",
     "./images/*": "./images/*",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./xsd/*": "./xsd/*"
   },
   "files": [
     "css",
-    "dist",
-    "images"
+    "lib",
+    "images",
+    "xsd"
   ],
   "homepage": "https://github.com/maxGraph/maxGraph",
   "repository": {
@@ -40,7 +44,7 @@
     "url": "https://github.com/maxGraph/maxGraph/issues"
   },
   "scripts": {
-    "clean": "rimraf dist",
+    "clean": "rimraf lib",
     "dev": "tsc --watch",
     "build": "tsc --version && tsc",
     "docs:api": "typedoc src/index.ts",
@@ -49,12 +53,12 @@
     "test-check": "tsc --noEmit --project tsconfig.test.json"
   },
   "devDependencies": {
-    "@swc/core": "~1.7.26",
-    "@swc/jest": "~0.2.36",
+    "@swc/core": "~1.10.14",
+    "@swc/jest": "~0.2.37",
     "jest": "~29.7.0",
     "jest-environment-jsdom": "~29.7.0",
     "npm-run-all": "~4.1.5",
-    "rimraf": "~5.0.5",
-    "typedoc": "~0.26.7"
+    "rimraf": "~6.0.1",
+    "typedoc": "~0.27.6"
   }
 }

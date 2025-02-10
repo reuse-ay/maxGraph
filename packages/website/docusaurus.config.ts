@@ -27,6 +27,11 @@ const config: Config = {
   onBrokenAnchors: 'throw',
   onBrokenMarkdownLinks: 'throw',
 
+  // Enable rspack build introduce in 3.6.0, see https://docusaurus.io/blog/releases/3.6#adoption-strategy
+  future: {
+    experimental_faster: true,
+  },
+
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
   // may want to replace "en" with "zh-Hans".
@@ -56,12 +61,12 @@ const config: Config = {
   themeConfig: {
     // Replace with your project's social card
     // image: 'img/docusaurus-social-card.jpg',
-    announcementBar: {
-      content:
-        '⚠️ This is a <b>work in progress</b>, the content of the original <i>mxGraph</i> documentation will be progressively migrated here ⚠️',
-      backgroundColor: 'rgb(255, 248, 230)',
-      isCloseable: false,
-    },
+    // announcementBar: {
+    //   content:
+    //     '⚠️ This is a <b>work in progress</b>, the content of the original <i>mxGraph</i> documentation will be progressively migrated here ⚠️',
+    //   backgroundColor: 'rgb(255, 248, 230)',
+    //   isCloseable: false,
+    // },
     docs: {
       sidebar: {
         hideable: true,
@@ -155,6 +160,26 @@ const config: Config = {
       darkTheme: prismThemes.dracula,
     },
   } satisfies Preset.ThemeConfig,
+
+  plugins: [
+    [
+      '@docusaurus/plugin-client-redirects',
+      {
+        redirects: [
+          // docs/manual/getting-started -> /docs/getting-started
+          {
+            to: '/docs/getting-started',
+            from: '/docs/manual/getting-started',
+          },
+          // docs/manual/model-and-cells -> /docs/manual/model-and-transactions
+          {
+            to: '/docs/manual/model-and-transactions',
+            from: '/docs/manual/model-and-cells',
+          },
+        ],
+      },
+    ],
+  ],
 };
 
 export default config;

@@ -19,11 +19,13 @@ import {
   CellOverlay,
   cloneUtils,
   DomHelpers,
+  EdgeStyle,
   Graph,
   type ImageBox,
   InternalEvent,
   ModelXmlSerializer,
   Perimeter,
+  StyleDefaultsConfig,
   xmlUtils,
 } from '@maxgraph/core';
 import { globalTypes } from './shared/args.js';
@@ -48,8 +50,7 @@ const Template = ({ label, ...args }: Record<string, string>) => {
   container.style.background = ''; // no grid
   div.appendChild(container);
 
-  // Should we allow overriding constants?
-  // constants.SHADOWCOLOR = '#e0e0e0';
+  StyleDefaultsConfig.shadowColor = '#e0e0e0';
 
   // Creates the graph inside the given container
   const graph = createGraph(container);
@@ -374,16 +375,14 @@ const Template = ({ label, ...args }: Record<string, string>) => {
     style.gradientColor = 'white';
     style.gradientDirection = 'east';
     style.rounded = true;
-    // style.shadow = true; // TMP disable until we can change the shadow color
+    style.shadow = true;
     style.fontStyle = 1; // bold
 
     style = graph.getStylesheet().getDefaultEdgeStyle();
-    // TODO was working in mxGraph, currently edgeStyle must be a string, but passing the function works at runtime
-    // style.edgeStyle = EdgeStyle.ElbowConnector;
-    style.edgeStyle = 'elbowEdgeStyle';
+    style.edgeStyle = EdgeStyle.ElbowConnector;
     style.strokeColor = '#808080';
     style.rounded = true;
-    // style.shadow = true; // TMP disable until we can change the shadow color
+    style.shadow = true;
 
     style = {};
     style.shape = 'swimlane';

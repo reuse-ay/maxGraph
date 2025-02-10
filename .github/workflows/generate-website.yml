@@ -25,6 +25,8 @@ on:
       - '.github/workflows/generate-website.yml'
       - '.nvmrc'
       - 'packages/core/**/*'
+      - 'packages/html/**/*'
+      - '!packages/html/README.md'
       - 'packages/website/**/*'
       - '!packages/website/README.md'
       - 'package.json'
@@ -57,6 +59,8 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: packages/website/build/
+      - name: Check types in website
+        run: npm run typecheck -w packages/website
 
   deploy:
     needs: build

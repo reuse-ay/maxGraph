@@ -1,5 +1,5 @@
 ---
-sidebar_position: 10
+sidebar_position: 20
 description: How-to easily migrate from mxGraph to maxGraph
 ---
 
@@ -30,7 +30,7 @@ The concepts are the same, so experienced `mxGraph` users should be able to swit
 
 The main changes are the removal of support for Internet Explorer (including VML support) and Legacy Edge.
 
-The initial description of the changes has been described in [#70](https://github.com/maxGraph/maxGraph/pull/70).
+The initial description of the changes has been described in [Pull Request #70](https://github.com/maxGraph/maxGraph/pull/70).
 
 ## Application setup
 
@@ -120,7 +120,7 @@ Please update your code accordingly.
 
 :::note
 
-A wide range of information is available at https://github.com/maxGraph/maxGraph/pull/70.
+A wide range of information is available in [Pull Request #70](https://github.com/maxGraph/maxGraph/pull/70) to explain the reasons for some of the major changes.
 
 :::
 
@@ -155,12 +155,16 @@ Several functions in `mxUtils` have been moved to their own namespaces in `maxGr
 Here are a few examples of the methods that have been moved.
 
 #### `domUtils`
-- `extractTextWithWhitespace()`: : Update your code to use `domUtils.extractTextWithWhitespace()` instead of `mxUtils.extractTextWithWhitespace()`.
+- `extractTextWithWhitespace()`: Update your code to use `domUtils.extractTextWithWhitespace()` instead of `mxUtils.extractTextWithWhitespace()`.
 
 #### `mathUtils`
 - `getBoundingBox()`: Update your code to use `mathUtils.getBoundingBox()` instead of `mxUtils.getBoundingBox()`.
 - `getPortConstraints()`: Update your code to use `mathUtils.getPortConstraints()` instead of `mxUtils.getPortConstraints()`.
 - `getRotatedPoint()`: Update your code to use `mathUtils.getRotatedPoint()` instead of `mxUtils.getRotatedPoint()`.
+
+#### `printUtils`
+- `printScreen()`: Update your code to use `printUtils.printScreen()` instead of `mxUtils.printScreen()`.
+- `show()`: Update your code to use `printUtils.show()` instead of `mxUtils.show()`.
 
 #### `stringUtils`
 - `trim()`: Update your code to use `stringUtils.trim()` instead of `mxUtils.trim()`.
@@ -169,15 +173,25 @@ Here are a few examples of the methods that have been moved.
 - `convertPoint()`: Update your code to use `styleUtils.convertPoint()` instead of `mxUtils.convertPoint()`.
 
 #### `xmlUtils`
-- `getXml`(): Update your code to use `xmlUtils.getXml()` instead of `mxUtils.getXml()`.
+- `getXml()`: Update your code to use `xmlUtils.getXml()` instead of `mxUtils.getXml()`.
 - `createXmlDocument()`: Update your code to use `xmlUtils.createXmlDocument()` instead of `mxUtils.createXmlDocument()`.
 
+#### In the default namespace
+- `get()`: Update your code to use `get()` instead of `mxUtils.get()`.
+- `load()`: Update your code to use `load()` instead of `mxUtils.load()`.
 
 ### Removed methods from `mxUtils`
+
+:::note
+
+This list is not intended to be exhaustive
+
+:::
 
 The following methods of `mxUtils` have been removed without replacements in `maxGraph`. Use your own implementation or 3rd party libraries instead:
 - `mxUtils.button`
 - `mxUtils.error`
+- `mxUtils.prompt`: use `window.prompt` instead. The mxGraph method was just a wrapper around `window.prompt` to manage `nullish` values. See the [mxUtils.prompt](https://github.com/jgraph/mxgraph/blob/ff141aab158417bd866e2dfebd06c61d40773cd2/javascript/src/js/util/mxUtils.js#L4304) for more details. 
 
 
 ### `mxAbstractCanvas2D`
@@ -220,10 +234,6 @@ const canvas = new mxgraph.mxSvgCanvas2D(element);
 const canvas = new SvgCanvas2D(svgElement, oneBoolean);
 ```
 
-#### `getAlternateText()`
-
-**TODO** change types ???????
-
 #### `format()`
 
 The `value` parameter, which was previously of type `string`, is now of type `number`.
@@ -249,6 +259,7 @@ an array of plugins to the constructor.
 
 | property removed        | method removed                | new plugin              |
 |-------------------------|-------------------------------|-------------------------|
+| `cellEditor`            | `createCellEditor`            | `CellEditorHandler`     |
 | `connectionHandler`     | `createConnectionHandler`     | `ConnectionHandler`     |
 | `graphHandler`          | `createGraphHandler`          | `SelectionHandler`      |
 | `panningHandler`        | `createPanningHandler`        | `PanningHandler`        |
@@ -331,14 +342,14 @@ For example, to set the `foldingEnabled` property, instead of doing `Graph.foldi
 
 - the `tolerance` property has been renamed (and the get/set method as well). It is now named `snapTolerance`.
 
-### mxResources
+### `mxResources`
 
 The `mxResources` class has been renamed to `Translations` in `maxGraph`.
 
 
-### Client
+### `mxClient`
 
-The `mxClient` class has been removed into `Client`.
+The `mxClient` class has been renamed to `Client`.
 
 Removed properties
 - `defaultBundles`
@@ -358,13 +369,33 @@ Moved methods
 - `link` method moved and renamed `domUtils.addLinkToHead`
 
 
+### `mxConstants`
+
+The `mxConstants` value object has been replaced by the `constants` namespace.
+
+The properties prefixed by `STYLE_` like `mxConstants.STYLE_FILLCOLOR` have been removed because they are no longer used. See the [Styling Properties](#properties) paragraph for a replacement.
+
+The other properties are still available.
+
+:::warning
+
+In `mxGraph`, the constants were used everywhere in the code and changing them would have a global effect.
+
+In `maxGraph`, it is no longer possible to update the value of the properties in the `constants` namespace.
+There are global configuration objects that allow to set the default values previously defined in `mxConstants` and these configurations are used everywhere in the code.
+
+But it is possible to configure their values globally. See the [Global Configuration](./global-configuration.md#general) documentation for more details.
+
+:::
+
+
 ### Cell manipulation
 
 Some methods previously available in `mxGraph` and `mxGraphModel` have been removed. These methods allowed for customizing the behavior of `mxGraphModel` and `mxCell`. However, now only the methods specific to `Cell` remain.  
 
 :::note
 
-You can find more information about these changes in the following GitHub pull request: https://github.com/maxGraph/maxGraph/pull/24.
+You can find more information about these changes in the GitHub [Pull Request #24](https://github.com/maxGraph/maxGraph/pull/24).
 
 :::
 
@@ -380,17 +411,18 @@ for more details about how to migrate the style property.
 #### `mxGraph`
 
 Some methods were removed:
-- `mxGraph.isCellVisible(cell)` see https://github.com/maxGraph/maxGraph/discussions/179#discussioncomment-5389942 for rationale
+- `mxGraph.isCellVisible(cell)` see [discussion #179](https://github.com/maxGraph/maxGraph/discussions/179#discussioncomment-5389942) for rationale
 
 
-#### `mxGraphDataModel`
+#### `mxGraphModel`
 
-Several methods from the `mxGraphDataModel` class have been moved to the `Cell` class. These methods no longer need the `cell` parameter:
+Several methods from the `mxGraphModel` class have been moved to the `Cell` class. These methods no longer need the `cell` parameter:
 
 - `filterDescendants()`
 - `getGeometry()`
+- `getParent(cell)`, use `Cell.getParent()` instead
+- `isAncestor(parent, child)`, use `Cell.isAncestor(child)` instead
 - `isEdge()`
-- `getParent()`
 
 Some methods in `mxGraphModel` that were general manipulation of cells and independent of the model have been moved to the `cellArrayUtils` namespace and are now available as individual functions.
 - `cloneCell()` (from version 0.11.0)
@@ -401,14 +433,29 @@ Some methods in `mxGraphModel` that were general manipulation of cells and indep
 
 Others were removed:
 - `cloneImpl()`
-- `isVisible(cell)` see https://github.com/maxGraph/maxGraph/discussions/179#discussioncomment-5389942 for rationale
+- `isVisible(cell)` see [discussion #179](https://github.com/maxGraph/maxGraph/discussions/179#discussioncomment-5389942) for rationale
 - `restoreClone()` (from version 0.11.0)
+
+### Cell handlers
+
+The following Cell handler classes have been renamed in `maxGraph`:
+- `mxEdgeHandler` to `EdgeHandler`
+- `mxEdgeSegmentHandler` to `EdgeSegmentHandler`
+- `mxElbowEdgeHandler` to `ElbowEdgeHandler`
+- `mxVertexHandler` to `VertexHandler`
+
+In `mxGraph`, the handlers were configured by updating their properties on the prototype.
+In `maxGraph`, the handlers are configured with a global configuration object. For more details, see the [Global Configuration](./global-configuration.md#general) documentation.
+
+For example, the `mxVertexHandler` class had a `rotationEnabled` property. 
+This property has been removed in `maxGraph`. Use the `VertexHandlerConfig.rotationEnabled` property instead (since `0.12.0`).
 
 ### Misc
 
-- Codec renaming and output: https://github.com/maxGraph/maxGraph/pull/70
+- Codec renaming and output: see [Pull Request #70](https://github.com/maxGraph/maxGraph/pull/70)
+- `mxCellEditor` to `CellEditorHandler`
 - `mxDictionary`&lt;T&gt; to `Dictionary`&lt;K, V&gt;
-
+- `mxRubberband` to `RubberBandHandler`
 
 ### Event handling
 
@@ -440,12 +487,11 @@ The event handling mechanism in `maxGraph` has been updated. Use the following g
 - Style of a Cell: a dedicated `CellStyle` object that reuses the same properties as the string form used by mxGraph (see below for changes).
 - Style of a State Cell: a `CellStateStyle` instance.
 
-
 #### Properties
 
 In `mxGraph`, the properties are defined as string. The property keys are defined in `mxConstants` and are prefixed by `STYLE_` like `mxConstants.STYLE_FILLCOLOR`.
 
-In `maxGraph`, they are object properties. `mxConstants.STYLE_*` have been replaced by the object properties (see PR [#31](https://github.com/maxGraph/maxGraph/pull/31)).
+In `maxGraph`, they are object properties. The usage of `mxConstants.STYLE_*` strings is replaced by the object properties (see [Pull Request #31](https://github.com/maxGraph/maxGraph/pull/31)).
 
 Property names and values are generally the same as in `mxGraph`. The ones that change are listed below.
 
@@ -493,12 +539,29 @@ Property type changed from `number` (0 or 1) to `boolean` (if not specified, fro
 
 ### Migration of default styles defined with StyleSheet
 
-**TODO: what is a StyleSheet? link to JSDoc/code**
+#### `mxGraph` stylesheet
+
+What is a `StyleSheet`?
+> The appearance of the cells in a graph is defined by the stylesheet, which is an instance of mxStylesheet. The stylesheet maps from style names to styles.
+
+See also
+- https://jgraph.github.io/mxgraph/docs/tutorial.html#3.2
+- https://jgraph.github.io/mxgraph/docs/manual.html#3.1.3.1
+
+
+#### `maxGraph` stylesheet
 
 The migration consists of converting [`StyleMap`](https://github.com/typed-mxgraph/typed-mxgraph/blob/187dd4f0dc7644c0cfbc998dae5fc90879597d81/lib/view/mxStylesheet.d.ts#L2-L4) objects to `CellStyle` objects.
 
 If you have been using string or named properties, you can keep that syntax.
-You just need to rename the property or update its value as described in (TODO anchor to properties change paragraph)
+You just need to rename the property or update its value as described in the [Styling Properties](#properties) paragraph.
+
+:::warning
+
+Be aware of the properties that have been renamed or whose value types have changed, as described in the [Styling Properties](#properties) paragraph.
+
+:::
+
 ```ts
 style['propertyName1'] = value1
 style.propertyName2 = value2
@@ -518,13 +581,13 @@ style.startSize = 8;
 
 ### Migration of specific style properties applied to dedicated cells
 
-- **TODO: what is a style? link to JSDoc/code**
-
 #### `mxGraph` style
+
+> A style is an array of key, value pairs to be used with the cells.
 
 [mxGraph line 50](https://github.com/jgraph/mxgraph/blob/v4.2.2/javascript/src/js/view/mxGraph.js#L50-L62)
 
-> For a named style, the the stylename must be the first element
+> For a named style, the style name must be the first element
 of the cell style:
 (code)
 stylename;image=http://www.example.com/image.gif
@@ -550,13 +613,15 @@ See also
 
 #### `maxGraph` style
 
-In maxGraph, the style is no more defined as a string but as a `CellStyle` object.
+In maxGraph, the style is no longer defined as a string but as a `CellStyle` object.
 
 Most of the time, the name of `CellStyle` properties is the same as the style keys in the mxGraph style.
 
+For more details about styles in maxGraph, see the [Styles section](../manual/cells.md#styles) in the Cells documentation.
+
 :::warning
 
-Be aware of the properties that have been renamed or whose value types have changed, as described in the [style properties](#properties) paragraph.
+Be aware of the properties that have been renamed or whose value types have changed, as described in the [Styling Properties](#properties) paragraph.
 
 :::
 
@@ -595,7 +660,7 @@ From version 0.11.0 of `maxGraph`, you can replicate this behavior by setting `i
 
 :::warning
 
-From version 0.6.0 of `maxGraph`, codecs supplied by maxGraph are no longer registered by default, they ** MUST** be registered before performing an `encode` or `decode`
+From [version 0.6.0](https://github.com/maxGraph/maxGraph/releases/tag/v0.6.0) of `maxGraph`, codecs supplied by maxGraph are no longer registered by default, they **MUST** be registered before performing an `encode` or `decode`
 
 For example:
 - You can use the `registerCoreCodecs` function (or other related functions) to register codecs.
@@ -603,8 +668,11 @@ For example:
 
 :::
 
+For more details, see the [Codecs](codecs.md) documentation. 
+This documentation covers topics such as codec registration, serialization processes, and configuration options.
+
 ## Conclusion
 
 By following these guidelines and updating your codebase accordingly, you should be able to migrate your application from `mxGraph` to `maxGraph`.
 Remember to test your application thoroughly after the migration to ensure that its functionality is preserved.
-If you encounter any problems during the migration process, please refer to the `maxGraph` documentation or ask the `maxGraph` community for help.
+If you encounter any problems during the migration process, please refer to the `maxGraph` documentation or ask the `maxGraph` [community for help](https://github.com/maxGraph/maxGraph/discussions/categories/q-a).

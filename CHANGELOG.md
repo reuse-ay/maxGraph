@@ -1,5 +1,50 @@
 # `maxGraph` Change Log
 
+All versions and breaking changes of [maxGraph](https://github.com/maxGraph/maxGraph) are documented here. We use [semantic versioning](http://semver.org/) for versions.
+
+For more details on the contents of a release, see [the GitHub release page] (https://github.com/maxGraph/maxGraph/releases).
+
+
+## Unreleased
+
+_**Note:** Yet to be released breaking changes appear here._
+
+## 0.15.0
+
+Release date: `2025-01-29`
+
+For more details, see the [0.15.0 Changelog](https://github.com/maxGraph/maxGraph/releases/tag/v0.15.0) on the GitHub release page.
+
+This new version offers more configuration options for edge handles (in particular, for virtual bends), and allows the "Entity Relation" connector to be globally configured.
+
+**Breaking Changes**:
+- Some properties have been removed from `EdgeHandler` as it was not possible to correctly change their value.
+They are replaced by global configuration in `EdgeHandlerConfig`:
+  - addEnabled --> addBendOnShiftClickEnabled
+  - removeEnabled --> removeBendOnShiftClickEnabled
+  - virtualBendOpacity
+  - virtualBendsEnabled
+- `domUtils.importNodeImplementation` has been removed:
+  - This function was only used internally in `mxGraph` to support older versions of IE
+  - It was not intended to be part of the public API
+  - No migration steps are needed as the function was unused
+
+## 0.14.0
+
+Release date: `2024-11-27`
+
+For more details, see the [0.14.0 Changelog](https://github.com/maxGraph/maxGraph/releases/tag/v0.14.0) on the GitHub release page.
+
+This new version offers more configuration options for vertex and edge handles, and allows certain default style configurations to be globally replaced.
+
+## 0.13.1
+
+Release date: `2024-11-04`
+
+For more details, see the [0.13.1 Changelog](https://github.com/maxGraph/maxGraph/releases/tag/v0.13.1) on the GitHub release page.
+
+This release contains documentation improvements and bug fixes.
+
 ## 0.13.0
 
 Release date: `2024-08-19`

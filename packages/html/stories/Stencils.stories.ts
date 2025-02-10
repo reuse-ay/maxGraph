@@ -26,6 +26,7 @@ import {
   EdgeHandler,
   getDefaultPlugins,
   Graph,
+  HandleConfig,
   InternalEvent,
   load,
   Point,
@@ -34,7 +35,9 @@ import {
   Shape,
   StencilShape,
   StencilShapeRegistry,
+  StyleDefaultsConfig,
   VertexHandler,
+  VertexHandlerConfig,
 } from '@maxgraph/core';
 import {
   contextMenuTypes,
@@ -66,15 +69,15 @@ const Template = ({ label, ...args }: Record<string, string>) => {
   const container = createGraphContainer(args);
   div.appendChild(container);
 
-  // Allow overriding constants. See https://github.com/maxGraph/maxGraph/issues/192
-  // Sets the global shadow color
-  // constants.SHADOWCOLOR = '#C0C0C0';
-  // constants.SHADOW_OPACITY = 0.5;
-  // constants.SHADOW_OFFSET_X = 4;
-  // constants.SHADOW_OFFSET_Y = 4;
-  // constants.HANDLE_FILLCOLOR = '#99ccff';
-  // constants.HANDLE_STROKECOLOR = '#0088cf';
-  // constants.VERTEX_SELECTION_COLOR = '#00a8ff';
+  // Sets the global configurations
+  StyleDefaultsConfig.shadowColor = '#C0C0C0';
+  StyleDefaultsConfig.shadowOpacity = 0.5;
+  StyleDefaultsConfig.shadowOffsetX = 4;
+  StyleDefaultsConfig.shadowOffsetY = 4;
+
+  HandleConfig.fillColor = '#99ccff';
+  HandleConfig.strokeColor = '#0088cf';
+  VertexHandlerConfig.selectionColor = '#00a8ff';
 
   // Enables connections along the outline
   ConnectionHandler.prototype.outlineConnect = true;
@@ -105,7 +108,7 @@ const Template = ({ label, ...args }: Record<string, string>) => {
 
       shape.outline = true;
       shape.bounds = bounds;
-      shape.stroke = constants.HANDLE_STROKECOLOR;
+      shape.stroke = HandleConfig.strokeColor;
       shape.strokeWidth = this.getSelectionStrokeWidth();
       shape.isDashed = this.isSelectionDashed();
       shape.isShadow = false;

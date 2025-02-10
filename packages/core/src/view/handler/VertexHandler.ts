@@ -17,19 +17,7 @@ limitations under the License.
 */
 
 import Rectangle from '../geometry/Rectangle';
-import {
-  CURSOR,
-  DIALECT,
-  HANDLE_FILLCOLOR,
-  HANDLE_SIZE,
-  HANDLE_STROKECOLOR,
-  LABEL_HANDLE_FILLCOLOR,
-  LABEL_HANDLE_SIZE,
-  NONE,
-  VERTEX_SELECTION_COLOR,
-  VERTEX_SELECTION_DASHED,
-  VERTEX_SELECTION_STROKEWIDTH,
-} from '../../util/Constants';
+import { CURSOR, DIALECT, NONE } from '../../util/Constants';
 import InternalEvent from '../event/InternalEvent';
 import RectangleShape from '../geometry/node/RectangleShape';
 import ImageShape from '../geometry/node/ImageShape';
@@ -49,12 +37,14 @@ import EdgeHandler from './EdgeHandler';
 import EventSource from '../event/EventSource';
 import SelectionHandler from './SelectionHandler';
 import SelectionCellsHandler from './SelectionCellsHandler';
-import { VertexHandlerConfig } from './config';
+import { HandleConfig, VertexHandlerConfig } from './config';
 
 /**
  * Event handler for resizing cells.
  *
  * This handler is automatically created in {@link Graph#createHandler}.
+ *
+ * Some elements of this handler and its subclasses can be configured using {@link EdgeHandlerConfig}.
  */
 class VertexHandler {
   escapeHandler: (sender: Listenable, evt: Event) => void;
@@ -194,7 +184,7 @@ class VertexHandler {
 
   rotationShape: Shape | null = null;
 
-  currentAlpha = 100;
+  currentAlpha: null | number = null;
   startAngle = 0;
   startDist = 0;
 
@@ -283,15 +273,15 @@ class VertexHandler {
         if (
           geo != null &&
           !geo.relative &&
-          //!this.graph.isSwimlane(this.state.cell) &&      disable for now
+          !this.graph.isSwimlane(this.state.cell) &&
           this.graph.isLabelMovable(this.state.cell)
         ) {
           // Marks this as the label handle for getHandleForEvent
           this.labelShape = this.createSizer(
             CURSOR.LABEL_HANDLE,
             InternalEvent.LABEL_HANDLE,
-            LABEL_HANDLE_SIZE,
-            LABEL_HANDLE_FILLCOLOR
+            HandleConfig.labelSize,
+            HandleConfig.labelFillColor
           );
           this.sizers.push(this.labelShape);
         }
@@ -305,7 +295,7 @@ class VertexHandler {
           CURSOR.MOVABLE_VERTEX,
           InternalEvent.LABEL_HANDLE,
           undefined,
-          LABEL_HANDLE_FILLCOLOR
+          HandleConfig.labelFillColor
         );
         this.sizers.push(this.labelShape);
       }
@@ -316,8 +306,8 @@ class VertexHandler {
       this.rotationShape = this.createSizer(
         this.rotationCursor,
         InternalEvent.ROTATION_HANDLE,
-        HANDLE_SIZE + 3,
-        HANDLE_FILLCOLOR
+        HandleConfig.size + 3,
+        HandleConfig.fillColor
       );
       this.sizers.push(this.rotationShape);
     }
@@ -448,24 +438,24 @@ class VertexHandler {
   }
 
   /**
-   * Returns {@link VERTEX_SELECTION_COLOR}.
+   * Returns {@link VertexHandlerConfig.selectionColor}.
    */
   getSelectionColor() {
-    return VERTEX_SELECTION_COLOR;
+    return VertexHandlerConfig.selectionColor;
   }
 
   /**
-   * Returns {@link VERTEX_SELECTION_STROKEWIDTH}.
+   * Returns {@link VertexHandlerConfig.selectionStrokeWidth}.
    */
   getSelectionStrokeWidth() {
-    return VERTEX_SELECTION_STROKEWIDTH;
+    return VertexHandlerConfig.selectionStrokeWidth;
   }
 
   /**
-   * Returns {@link VERTEX_SELECTION_DASHED}.
+   * Returns {@link VertexHandlerConfig.selectionDashed}.
    */
   isSelectionDashed() {
-    return VERTEX_SELECTION_DASHED;
+    return VertexHandlerConfig.selectionDashed;
   }
 
   /**
@@ -475,8 +465,8 @@ class VertexHandler {
   createSizer(
     cursor: string,
     index: number,
-    size = HANDLE_SIZE,
-    fillColor = HANDLE_FILLCOLOR
+    size = HandleConfig.size,
+    fillColor = HandleConfig.fillColor
   ) {
     const bounds = new Rectangle(0, 0, size, size);
     const sizer = this.createSizerShape(bounds, index, fillColor);
@@ -524,7 +514,7 @@ class VertexHandler {
    * index. Only images and rectangles should be returned if support for HTML
    * labels with not foreign objects is required.
    */
-  createSizerShape(bounds: Rectangle, index: number, fillColor = HANDLE_FILLCOLOR) {
+  createSizerShape(bounds: Rectangle, index: number, fillColor = HandleConfig.fillColor) {
     if (this.handleImage) {
       bounds = new Rectangle(
         bounds.x,
@@ -539,10 +529,11 @@ class VertexHandler {
 
       return shape;
     }
+    const strokeColor = HandleConfig.strokeColor;
     if (index === InternalEvent.ROTATION_HANDLE) {
-      return new EllipseShape(bounds, fillColor, HANDLE_STROKECOLOR);
+      return new EllipseShape(bounds, fillColor, strokeColor);
     }
-    return new RectangleShape(bounds, fillColor, HANDLE_STROKECOLOR);
+    return new RectangleShape(bounds, fillColor, strokeColor);
   }
 
   /**
@@ -698,9 +689,12 @@ class VertexHandler {
         this.preview = this.createSelectionShape(this.bounds);
 
         if (
-          !(Client.IS_SVG && Number(this.state.style.rotation || '0') !== 0) &&
-          this.state.text != null &&
-          this.state.text.node.parentNode === this.graph.container
+          !(
+            Client.IS_SVG &&
+            (this.state.style.rotation ?? 0) != 0 &&
+            this.state.text != null &&
+            this.state.text.node.parentNode === this.graph.container
+          )
         ) {
           this.preview.dialect = DIALECT.STRICTHTML;
           this.preview.init(this.graph.container);
@@ -1325,7 +1319,7 @@ class VertexHandler {
       if (cell.isVertex() || cell.isEdge()) {
         if (!cell.isEdge()) {
           const style = this.graph.getCurrentCellStyle(cell);
-          const total = (style.rotation || 0) + angle;
+          const total = (style.rotation ?? 0) + angle;
           this.graph.setCellStyles('rotation', total, [cell]);
         }
 
@@ -1362,6 +1356,7 @@ class VertexHandler {
     }
 
     this.index = null;
+    this.currentAlpha = null;
 
     // TODO: Reset and redraw cell states for live preview
     if (this.preview) {
@@ -1892,7 +1887,7 @@ class VertexHandler {
     }
 
     if (this.rotationShape) {
-      const alpha = toRadians(this.currentAlpha);
+      const alpha = toRadians(this.currentAlpha ?? this.state.style.rotation ?? 0);
       const cos = Math.cos(alpha);
       const sin = Math.sin(alpha);
 
