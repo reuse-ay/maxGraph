@@ -1,5 +1,3 @@
 export class EditorUi {
-  constructor() {
-
-  }
+  constructor() {}
 }

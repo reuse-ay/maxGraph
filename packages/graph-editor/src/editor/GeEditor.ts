@@ -1,7 +1,6 @@
-import { EventSource, Graph, GraphDataModel } from "@maxgraph/core"
+import { Graph, GraphDataModel } from 'packages/core/src';
 
 export class GeEditor {
-
   chromeless: any;
 
   graph: Graph;
@@ -20,16 +19,14 @@ export class GeEditor {
     editable: any
   ) {
     //EventSource.call(this);
-    this.chromeless = (chromeless != null) ? chromeless : this.chromeless;
+    this.chromeless = chromeless != null ? chromeless : this.chromeless;
     this.initStencilRegistry();
     this.graph = graph || this.createGraph(themes, model);
   }
 
-  initStencilRegistry() {
+  initStencilRegistry() {}
 
-  }
-
-  creteGraph(themes: any, model: GraphDataModel) {
-    const graph = new Graph(null, model, undefined, null)
+  createGraph(themes: any, model: GraphDataModel) {
+    const graph = new Graph(null, model, undefined, null);
   }
 }
