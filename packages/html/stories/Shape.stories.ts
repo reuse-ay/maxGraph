@@ -75,7 +75,7 @@ const Template = ({ label, ...args }: Record<string, string>) => {
       _y: number,
       w: number,
       h: number,
-      isForeground?: boolean
+      isForeground: boolean = false
     ) {
       const dy = BoxShape.extrude * this.scale;
       const dx = BoxShape.extrude * this.scale;
