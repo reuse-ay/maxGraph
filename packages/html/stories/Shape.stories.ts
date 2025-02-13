@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Graph, CylinderShape, CellRenderer } from '@maxgraph/core';
+import { Graph, CylinderShape, CellRenderer, AbstractCanvas2D } from '@maxgraph/core';
 import { globalTypes, globalValues } from './shared/args.js';
 import { createGraphContainer } from './shared/configure.js';
 
@@ -29,7 +29,7 @@ export default {
   },
 };
 
-const Template = ({ label, ...args }) => {
+const Template = ({ label, ...args }: Record<string, string>) => {
   const container = createGraphContainer(args);
 
   /*
@@ -50,7 +50,7 @@ const Template = ({ label, ...args }) => {
 
   class BoxShape extends CylinderShape {
     // Defines the extrusion of the box as a "static class variable"
-    extrude = 10;
+    static extrude = 10;
 
     /*
           Next, the CylinderShape's redrawPath method is "overridden".
@@ -69,9 +69,16 @@ const Template = ({ label, ...args }) => {
                       |     /
                       |____/
     */
-    redrawPath(path, x, y, w, h, isForeground) {
-      const dy = this.extrude * this.scale;
-      const dx = this.extrude * this.scale;
+    redrawPath(
+      path: AbstractCanvas2D,
+      _x: number,
+      _y: number,
+      w: number,
+      h: number,
+      isForeground?: boolean
+    ) {
+      const dy = BoxShape.extrude * this.scale;
+      const dx = BoxShape.extrude * this.scale;
 
       if (isForeground) {
         path.moveTo(0, dy);
@@ -92,6 +99,8 @@ const Template = ({ label, ...args }) => {
       }
     }
   }
+
+  //@ts-ignore
   CellRenderer.registerShape('box', BoxShape);
 
   // Creates the graph inside the DOM node.
@@ -107,8 +116,8 @@ const Template = ({ label, ...args }) => {
 
   // Adds a spacing for the label that matches the
   // extrusion size
-  style.spacingTop = BoxShape.prototype.extrude;
-  style.spacingRight = BoxShape.prototype.extrude;
+  style.spacingTop = BoxShape.extrude;
+  style.spacingRight = BoxShape.extrude;
 
   // Adds a gradient and shadow to improve the user experience
   style.gradientColor = '#FFFFFF';
@@ -122,7 +131,7 @@ const Template = ({ label, ...args }) => {
   graph.batchUpdate(() => {
     const v1 = graph.insertVertex(parent, null, 'Custom', 20, 20, 80, 60);
     const v2 = graph.insertVertex(parent, null, 'Shape', 200, 150, 80, 60);
-    const e1 = graph.insertEdge(parent, null, '', v1, v2);
+    graph.insertEdge(parent, null, '', v1, v2);
   });
 
   return container;
